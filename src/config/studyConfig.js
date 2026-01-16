@@ -177,7 +177,7 @@ export const STUDY_CONFIG = {
     redirecting: 'Preparing Study',
     redirectSubtitle: 'Please wait while we prepare your study materials...',
     completed: 'Thank You',
-    completedSubtitle: 'Our records indicate that you have already completed this screening. Thank you for your time. If you have any questions, please contact us at yukizhuyue@outlook.com.',
+    completedSubtitle: 'Our records indicate that you have already completed this screening. Thank you for your time. If you have any questions, please contact us at zhu5@kth.se.',
     disqualified: 'Based on your responses, you do not currently qualify for this study.',
   disqualifiedSubtitle: 'We appreciate your interest. If you have any questions, please contact us at zhu5@kth.se.',
     error: 'An error occurred. Please try again.'
