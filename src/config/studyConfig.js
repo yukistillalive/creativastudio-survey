@@ -7,10 +7,10 @@ export const STUDY_CONFIG = {
   // Debug and Testing Configuration
   debug: {
     enabled: false, // Set to false in production
-    showDeviceInfo: true, // Show device ID in console
+    showDeviceInfo: false, // Show device ID in console
     bypassSecurity: false, // Set to true to bypass some security for testing
-    testMode: true, // Enable test mode features
-    showExemptionStatus: true // Show when device exemptions are working
+    testMode: false, // Enable test mode features
+    showExemptionStatus: false // Show when device exemptions are working
   },
   
   // Device Exemption List - Add your device IDs here for testing
