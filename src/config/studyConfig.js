@@ -6,7 +6,7 @@ export const STUDY_CONFIG = {
   
   // Debug and Testing Configuration
   debug: {
-    enabled: true, // Set to false in production
+    enabled: false, // Set to false in production
     showDeviceInfo: true, // Show device ID in console
     bypassSecurity: false, // Set to true to bypass some security for testing
     testMode: true, // Enable test mode features
