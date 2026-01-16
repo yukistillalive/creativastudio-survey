@@ -9,14 +9,14 @@ export const STUDY_CONFIG = {
     enabled: false, // Set to false in production
     showDeviceInfo: true, // Show device ID in console
     bypassSecurity: false, // Set to true to bypass some security for testing
-    testMode: true, // Enable test mode features
+    testMode: false, // Enable test mode features
     showExemptionStatus: true // Show when device exemptions are working
   },
   
   // Device Exemption List - Add your device IDs here for testing
   deviceExemptions: [
     'gsato4', // Your actual device ID
-    'test-device-1', // Test device for development
+    'e9tfuj', // yuki's macbook
     'test-device-2', // Test device for development
     'test-device-3', // Test device for development
     // Add more device IDs as needed
@@ -135,7 +135,7 @@ export const STUDY_CONFIG = {
   // Welcome Page Configuration
   welcomePage: {
     enabled: true, // Set to false to skip welcome page and go directly to questions
-    title: "Research on a Creative AI Tool",
+    title: "Feedback on a GenAI Prototype for Creative Workflow",
     subtitle: "We are recruiting creative practitioners like you to help evaluate a new GenAI prototype for creative workflows.",
 
     // description: "We're evaluating a new GenAI prototype designed specifically for creative workflows. Your insights will directly influence how AI tools are developed for the creative industry.",
@@ -157,7 +157,7 @@ export const STUDY_CONFIG = {
     // keyPointsTitle: "Before we begin:", // Title for the key points section
     
     // Additional information box (optional)
-    additionalInfo: "Quick setup: Stable internet required • Complete in one sitting • Takes 10-15 minutes",
+    additionalInfo: "Quick setup: Stable internet required • Complete in one sitting • Takes 20-25 minutes",
     
     // Time estimate (optional)
     // timeEstimate: "10-15 minutes",
@@ -178,7 +178,7 @@ export const STUDY_CONFIG = {
     completed: 'Thank You',
     completedSubtitle: 'Our records indicate that you have already completed this screening. Thank you for your time. If you have any questions, please contact us at yukizhuyue@outlook.com.',
     disqualified: 'Based on your responses, you do not currently qualify for this study.',
-  disqualifiedSubtitle: 'We appreciate your interest. If you have any questions, please contact us at yukizhuyue@outlook.com.',
+  disqualifiedSubtitle: 'We appreciate your interest. If you have any questions, please contact us at zhu5@kth.se.',
     error: 'An error occurred. Please try again.'
   }
 };

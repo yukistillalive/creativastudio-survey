@@ -6,7 +6,7 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter basename="//creativastudio-survey">
+    <BrowserRouter basename="/creativastudio-survey/">
       <App />
     </BrowserRouter>
   </React.StrictMode>,

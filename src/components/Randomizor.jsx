@@ -99,17 +99,8 @@ const Randomizor = () => {
       abTestingManager.incrementGroupCount();
     }
     
-    setIsRedirecting(true);
-    
-    // Redirect to form after delay
-    setTimeout(() => {
-      const formUrl = abTestingManager?.getFormUrl();
-      if (formUrl) {
-        window.location.replace(formUrl);
-      } else {
-        navigate('/end');
-      }
-    }, STUDY_CONFIG.ui.loadingDelay);
+    // Navigate directly to survey without delay
+    navigate('/survey');
   };
 
   // Debug functions

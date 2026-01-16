@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { STUDY_CONFIG } from './config/studyConfig';
 import WelcomePage from './components/WelcomePage';
 import Randomizor from './components/Randomizor';
+import Survey from './components/Survey';
 import EndPage from './components/EndPage';
 import './App.css';
 
@@ -19,6 +20,7 @@ function App() {
           } 
         />
         <Route path="/study" element={<Randomizor />} />
+        <Route path="/survey" element={<Survey />} />
         <Route path="/end" element={<EndPage />} />
       </Routes>
     </div>

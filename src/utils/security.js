@@ -154,7 +154,6 @@ export class SecurityManager {
 
   // Check if device is exempt from certain restrictions
   async isDeviceExempt() {
-    const { STUDY_CONFIG } = await import('../config/studyConfig.js');
     return STUDY_CONFIG.deviceExemptions.includes(this.deviceId);
   }
 }
@@ -222,15 +221,12 @@ export class SessionManager {
 
   async checkCompletion() {
     // Check if device is exempt first
-    if (this.deviceId) {
-      const { STUDY_CONFIG } = await import('../config/studyConfig.js');
-      if (STUDY_CONFIG.deviceExemptions.includes(this.deviceId)) {
-        console.log('🎯 DEVICE EXEMPTION WORKING:', this.deviceId);
-        console.log('✅ Clearing completion data for exempt device');
-        // Clear any existing completion data for exempt devices
-        SecureStorage.removeItem(`ab_test_completed_${this.deviceId}`);
-        return false; // Allow access even if previously completed
-      }
+    if (this.deviceId && STUDY_CONFIG.deviceExemptions.includes(this.deviceId)) {
+      console.log('🎯 DEVICE EXEMPTION WORKING:', this.deviceId);
+      console.log('✅ Clearing completion data for exempt device');
+      // Clear any existing completion data for exempt devices
+      SecureStorage.removeItem(`ab_test_completed_${this.deviceId}`);
+      return false; // Allow access even if previously completed
     }
     
     const completed = SecureStorage.getItem(`ab_test_completed_${this.deviceId}`);
