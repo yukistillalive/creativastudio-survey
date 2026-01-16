@@ -6,10 +6,10 @@ export const STUDY_CONFIG = {
   
   // Debug and Testing Configuration
   debug: {
-    enabled: false, // Set to false in production
+    enabled: true, // Set to false in production
     showDeviceInfo: true, // Show device ID in console
     bypassSecurity: false, // Set to true to bypass some security for testing
-    testMode: false, // Enable test mode features
+    testMode: true, // Enable test mode features
     showExemptionStatus: true // Show when device exemptions are working
   },
   
@@ -121,7 +121,8 @@ export const STUDY_CONFIG = {
     preventDevTools: true,
     preventRefresh: true,
     sessionTimeout: 60000, // 1 minute
-    deviceFingerprinting: true
+    deviceFingerprinting: true,
+    maxVisitsPerDevice: 3 // Maximum number of completions allowed per device (1 = once, 2 = twice, etc.)
   },
   
   // UI settings

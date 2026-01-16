@@ -31,6 +31,14 @@ const Randomizor = () => {
       const { deviceId, sessionToken } = await security.initialize();
       setSecurityManager(security);
 
+      // Log device ID for debugging
+      if (STUDY_CONFIG.debug.enabled) {
+        console.log('==============================================');
+        console.log('🔑 YOUR DEVICE ID:', deviceId);
+        console.log('📋 Add this to deviceExemptions in studyConfig.js');
+        console.log('==============================================');
+      }
+
       // Initialize session management
       const session = new SessionManager(deviceId, sessionToken);
       setSessionManager(session);

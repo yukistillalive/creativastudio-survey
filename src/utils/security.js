@@ -226,15 +226,41 @@ export class SessionManager {
       console.log('✅ Clearing completion data for exempt device');
       // Clear any existing completion data for exempt devices
       SecureStorage.removeItem(`ab_test_completed_${this.deviceId}`);
+      SecureStorage.removeItem(`ab_test_visits_${this.deviceId}`);
       return false; // Allow access even if previously completed
     }
     
-    const completed = SecureStorage.getItem(`ab_test_completed_${this.deviceId}`);
-    return completed === true;
+    // Check visit count against limit
+    const maxVisits = STUDY_CONFIG.security.maxVisitsPerDevice || 1;
+    const visitCount = SecureStorage.getItem(`ab_test_visits_${this.deviceId}`) || 0;
+    
+    if (visitCount >= maxVisits) {
+      console.log(`🚫 Device has reached visit limit: ${visitCount}/${maxVisits}`);
+      return true; // Block access
+    }
+    
+    return false; // Allow access
   }
 
   markCompleted() {
+    // Increment visit counter
+    const currentVisits = SecureStorage.getItem(`ab_test_visits_${this.deviceId}`) || 0;
+    SecureStorage.setItem(`ab_test_visits_${this.deviceId}`, currentVisits + 1);
+    
+    // Also set legacy completion flag for backward compatibility
     SecureStorage.setItem(`ab_test_completed_${this.deviceId}`, true);
+    
+    console.log(`✅ Visit recorded. Total visits: ${currentVisits + 1}`);
+  }
+
+  getVisitCount() {
+    return SecureStorage.getItem(`ab_test_visits_${this.deviceId}`) || 0;
+  }
+
+  getRemainingVisits() {
+    const maxVisits = STUDY_CONFIG.security.maxVisitsPerDevice || 1;
+    const currentVisits = this.getVisitCount();
+    return Math.max(0, maxVisits - currentVisits);
   }
 
   getSessionData() {
