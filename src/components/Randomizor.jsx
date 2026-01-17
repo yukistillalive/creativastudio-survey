@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { STUDY_CONFIG, getQuestionByStep, getNextStep } from '../config/studyConfig';
 import { SecurityManager, SessionManager, SecureStorage } from '../utils/security';
 import { createABTestingManager } from '../utils/abTesting';
+import { checkParticipantIdExists, storeParticipantId } from '../utils/firebase';
 import QuestionForm from './QuestionForm';
 import LoadingSpinner from './LoadingSpinner';
 import RedirectMessage from './RedirectMessage';
@@ -134,7 +135,7 @@ const Randomizor = () => {
     }, 2000);
   };
 
-  const handleRedirect = () => {
+  const handleRedirect = async () => {
     if (sessionManager) {
       sessionManager.markCompleted();
     }
@@ -142,12 +143,31 @@ const Randomizor = () => {
     // Assign AB group first
     const group = abTestingManager?.getTestGroup();
     
-    // Generate unique ID (no group identifier embedded)
-    const id = generateUniqueParticipantId();
+    // Generate unique ID and check if it exists in Firebase
+    let id;
+    let attempts = 0;
+    const maxAttempts = 5;
+    
+    do {
+      id = generateUniqueParticipantId();
+      const exists = await checkParticipantIdExists(id);
+      
+      if (!exists) {
+        break; // Found a unique ID
+      }
+      
+      attempts++;
+    } while (attempts < maxAttempts);
+    
+    // Store ID in Firebase
+    await storeParticipantId(id, group, {
+      deviceId: securityManager?.getDeviceId()
+    });
+    
     setParticipantId(id);
     SecureStorage.setItem('participant_id', id);
     
-    // Store group mapping separately
+    // Store group mapping
     SecureStorage.setItem('participant_group', group);
     SecureStorage.setItem(`participant_group_map_${id}`, group);
     

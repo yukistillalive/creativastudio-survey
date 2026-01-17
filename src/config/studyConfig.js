@@ -4,6 +4,7 @@ export const STUDY_CONFIG = {
   title: "Feedback on a GenAI Prototype for Creative Workflow",
   description: "Thank you for your interest in this study. This survey is about to test a prototype of a GenAI tool for creative workflows. Before we begin, we need to ask a few questions to determine your eligibility.",
   
+
   // Debug and Testing Configuration
   debug: {
     enabled: false, // Set to false in production
