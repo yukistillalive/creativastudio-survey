@@ -19,6 +19,9 @@ const Randomizor = () => {
   const [securityManager, setSecurityManager] = useState(null);
   const [sessionManager, setSessionManager] = useState(null);
   const [abTestingManager, setAbTestingManager] = useState(null);
+  const [showParticipantId, setShowParticipantId] = useState(false);
+  const [participantId, setParticipantId] = useState('');
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     initializeApp();
@@ -87,6 +90,38 @@ const Randomizor = () => {
     setCurrentStep(nextStep);
   };
 
+  // Generate a unique participant ID based on timestamp + random code
+  const generateUniqueParticipantId = () => {
+    // Use timestamp in base36 (shorter)
+    const timestamp = Date.now().toString(36).toUpperCase().slice(-4);
+    
+    // Add random 2-character code
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let randomCode = '';
+    for (let i = 0; i < 2; i++) {
+      randomCode += chars[Math.floor(Math.random() * chars.length)];
+    }
+    
+    // Format: XZ24K7 (6 chars total, no group identifier)
+    return `${timestamp}${randomCode}`;
+  };
+
+  const handleCopyId = async () => {
+    try {
+      await navigator.clipboard.writeText(participantId);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch (e) {
+      setCopied(false);
+    }
+  };
+
+  // Debug: Force clear and reassign for testing
+  const handleDebugReset = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
+
   const handleDisqualify = () => {
     if (sessionManager) {
       sessionManager.markCompleted();
@@ -103,11 +138,27 @@ const Randomizor = () => {
     if (sessionManager) {
       sessionManager.markCompleted();
     }
+    
+    // Assign AB group first
+    const group = abTestingManager?.getTestGroup();
+    
+    // Generate unique ID (no group identifier embedded)
+    const id = generateUniqueParticipantId();
+    setParticipantId(id);
+    SecureStorage.setItem('participant_id', id);
+    
+    // Store group mapping separately
+    SecureStorage.setItem('participant_group', group);
+    SecureStorage.setItem(`participant_group_map_${id}`, group);
+    
+    setShowParticipantId(true);
+  };
+
+  const handleContinueToSurvey = () => {
+    // Group already assigned, just increment counter and navigate
     if (abTestingManager) {
       abTestingManager.incrementGroupCount();
     }
-    
-    // Navigate directly to survey without delay
     navigate('/survey');
   };
 
@@ -178,6 +229,47 @@ const Randomizor = () => {
 
   if (isRedirecting) {
     return <RedirectMessage />;
+  }
+
+  // Participant ID copy screen
+  if (showParticipantId) {
+    return (
+      <div className="flex items-center justify-center min-h-screen p-4 fade-in">
+        <div className="glass-card p-8 rounded-2xl shadow-modern-lg w-full max-w-2xl text-center">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            Your Participant ID
+          </h2>
+          <p className="text-gray-600 mb-6">Please copy this ID. You will paste it at the top of the next form.</p>
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <code className="text-2xl font-mono tracking-widest bg-gray-50 border border-gray-200 rounded-lg px-4 py-3">
+              {participantId}
+            </code>
+            <button
+              onClick={handleCopyId}
+              className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+            >
+              {copied ? 'Copied!' : 'Copy'}
+            </button>
+          </div>
+          <button
+            onClick={handleContinueToSurvey}
+            className="px-6 py-3 rounded-lg bg-purple-600 text-white hover:bg-purple-700"
+          >
+            I’ve copied my ID – Continue
+          </button>          
+          {STUDY_CONFIG.debug.enabled && (
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <p className="text-xs text-gray-500 mb-2">Debug: Clear data and test another group</p>
+              <button
+                onClick={handleDebugReset}
+                className="px-3 py-1 text-sm rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
+              >
+                Reset & Test Again
+              </button>
+            </div>
+          )}        </div>
+      </div>
+    );
   }
 
   const currentQuestion = getQuestionByStep(currentStep);
