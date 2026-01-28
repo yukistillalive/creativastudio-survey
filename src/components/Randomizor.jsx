@@ -159,7 +159,11 @@ const Randomizor = () => {
       attempts++;
     } while (attempts < maxAttempts);
     
-    // Store ID in Firebase
+    // Log the group assignment
+    console.log('🎯 Assigned Group:', group);
+    console.log('🆔 Participant ID:', id);
+    
+    // Store ID in Firebase with the correct group
     await storeParticipantId(id, group, {
       deviceId: securityManager?.getDeviceId()
     });
@@ -176,10 +180,12 @@ const Randomizor = () => {
 
   const handleContinueToSurvey = () => {
     // Group already assigned, just increment counter and navigate
+    const group = abTestingManager?.getTestGroup() || SecureStorage.getItem('participant_group');
     if (abTestingManager) {
       abTestingManager.incrementGroupCount();
     }
-    navigate('/survey');
+    // Pass group as URL parameter to ensure Survey.jsx gets it
+    navigate(`/survey?variant=${group}`);
   };
 
   // Debug functions

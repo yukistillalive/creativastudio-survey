@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { STUDY_CONFIG } from '../config/studyConfig';
+import { SecureStorage } from '../utils/security';
 
 function Survey() {
   const [searchParams] = useSearchParams();
@@ -8,41 +10,46 @@ function Survey() {
   const [testGroup, setTestGroup] = useState(null);
   const [participantId, setParticipantId] = useState('');
 
-  const FORM_URLS = {
-    'A': 'https://docs.google.com/forms/d/e/1FAIpQLSea70NkZ0RhYjfgatbSHS_d1DKTsRSkmK-9aT1i8Vznx4KY5A/viewform?embedded=true',
-    'B': 'https://docs.google.com/forms/d/e/1FAIpQLScHYoXRHAd9EY78wVXoJ8Hkbmx_p1YNzt5izkMyluiFkCwS7A/viewform?embedded=true'
-  };
+  // Use form URLs from config
+  const FORM_URLS = STUDY_CONFIG.formUrls;
 
   useEffect(() => {
     const determineForm = () => {
-      // Get participant ID from localStorage
-      const storedId = localStorage.getItem('participant_id');
+      // Get participant ID from SecureStorage
+      const storedId = SecureStorage.getItem('participant_id');
       if (storedId) {
-        try {
-          const decoded = atob(storedId);
-          setParticipantId(JSON.parse(decoded));
-        } catch {
-          setParticipantId(storedId);
-        }
+        setParticipantId(storedId);
       }
 
       // First check URL parameter
       const variant = searchParams.get('variant');
       if (variant === 'A' || variant === 'B') {
+        console.log('✅ Group from URL parameter:', variant);
         setTestGroup(variant);
         setFormUrl(FORM_URLS[variant]);
         setIsLoading(false);
         return;
       }
 
-      // Try to get from secure storage (set by AB testing manager)
+      // Check participant_group which is set when ID is generated
+      const participantGroup = SecureStorage.getItem('participant_group');
+      if (participantGroup && FORM_URLS[participantGroup]) {
+        console.log('✅ Group from participant_group:', participantGroup);
+        setTestGroup(participantGroup);
+        setFormUrl(FORM_URLS[participantGroup]);
+        setIsLoading(false);
+        return;
+      }
+
+      // Try to get from ab_test_group in secure storage
       const storedGroup = Object.keys(localStorage).find(key => 
-        key.includes('ab_test_group')
+        key.includes('ab_test_group') && !key.includes('count') && !key.includes('fallback')
       );
       
       if (storedGroup) {
         const group = localStorage.getItem(storedGroup);
         if (group && FORM_URLS[group]) {
+          console.log('✅ Group from ab_test_group storage:', group);
           setTestGroup(group);
           setFormUrl(FORM_URLS[group]);
           setIsLoading(false);
@@ -50,18 +57,15 @@ function Survey() {
         }
       }
 
-      // Fall back to random assignment
-      const randomGroup = Math.random() < 0.5 ? 'A' : 'B';
-      setTestGroup(randomGroup);
-      setFormUrl(FORM_URLS[randomGroup]);
-      
-      // Store for consistency
-      localStorage.setItem('ab_test_group_fallback', randomGroup);
+      // If we get here, something went wrong - show error
+      console.error('❌ Could not determine group assignment');
+      setTestGroup('B'); // Default fallback
+      setFormUrl(FORM_URLS['B']);
       setIsLoading(false);
     };
 
     determineForm();
-  }, [searchParams]);
+  }, [searchParams, FORM_URLS]);
 
   if (isLoading) {
     return (
