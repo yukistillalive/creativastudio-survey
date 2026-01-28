@@ -145,7 +145,7 @@ export const STUDY_CONFIG = {
     
     // Optional logo (set showLogo to false to hide)
     showLogo: true,
-    logo: "/creativastudio-survey/study-logo.png", // URL or path to logo image
+    logo: "/study-logo.png", // URL or path to logo image
     logoAlt: "Study Logo", // Alt text for accessibility
     logoWidth: "200px", // Optional: control logo size
     logoHeight: "auto", // Optional: control logo height
