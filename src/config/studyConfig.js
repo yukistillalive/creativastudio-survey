@@ -1,7 +1,7 @@
 // Study Configuration - Easy to modify settings and logic
 export const STUDY_CONFIG = {
   // Study metadata
-  title: "Feedback on a GenAI Prototype for Creative Workflow",
+  title: "Give Your Expert Opinion on CreativaStudio",
   description: "Thank you for your interest in this study. This survey is about to test a prototype of a GenAI tool for creative workflows. Before we begin, we need to ask a few questions to determine your eligibility.",
   
 
@@ -138,7 +138,7 @@ export const STUDY_CONFIG = {
   // Welcome Page Configuration
   welcomePage: {
     enabled: true, // Set to false to skip welcome page and go directly to questions
-    title: "Feedback on a GenAI Prototype for Creative Workflow",
+    title: "Give Your Expert Opinion on CreativaStudio",
     subtitle: "We are recruiting creative practitioners like you to help evaluate a new GenAI prototype for creative workflows.",
 
     // description: "We're evaluating a new GenAI prototype designed specifically for creative workflows. Your insights will directly influence how AI tools are developed for the creative industry.",
