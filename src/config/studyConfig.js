@@ -160,7 +160,7 @@ export const STUDY_CONFIG = {
     // keyPointsTitle: "Before we begin:", // Title for the key points section
     
     // Additional information box (optional)
-    additionalInfo: "Quick setup: Stable internet required • Complete in one sitting • Takes 20-25 minutes",
+    additionalInfo: "Quick setup: Stable internet required • Complete in one sitting • Takes 15-20 minutes",
     
     // Time estimate (optional)
     // timeEstimate: "10-15 minutes",
