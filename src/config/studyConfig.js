@@ -124,7 +124,7 @@ export const STUDY_CONFIG = {
     preventRefresh: true,
     sessionTimeout: 60000, // 1 minute
     deviceFingerprinting: true,
-    maxVisitsPerDevice: 3 // Maximum number of completions allowed per device (1 = once, 2 = twice, etc.)
+    maxVisitsPerDevice: 1 // Maximum number of completions allowed per device (1 = once, 2 = twice, etc.)
   },
   
   // UI settings
